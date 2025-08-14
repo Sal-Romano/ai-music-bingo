@@ -1,0 +1,5 @@
+.kiro/settings
+.mcp.json
+node_modules/
+.env
+.next/
