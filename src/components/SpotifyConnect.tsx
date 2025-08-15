@@ -58,8 +58,11 @@ export default function SpotifyConnect({ user }: { user: User }) {
   if (loading) {
     return (
       <div className="text-center">
-        <div className="bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded cursor-not-allowed">
-          Checking Spotify connection...
+        <div className="card max-w-lg mx-auto">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="animate-spin w-6 h-6 border-4 border-green-500 border-t-transparent rounded-full"></div>
+            <span className="text-xl">Checking Spotify connection...</span>
+          </div>
         </div>
       </div>
     )
@@ -70,25 +73,38 @@ export default function SpotifyConnect({ user }: { user: User }) {
     
     return (
       <div className="text-center">
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-          ✅ Spotify Premium connected!
-          {isExpired && <span className="text-orange-600"> (Token expired - please reconnect)</span>}
-        </div>
-        <div className="space-x-4">
-          {isExpired && (
+        <div className="card max-w-lg mx-auto">
+          <div className="text-6xl mb-6">🎧</div>
+          <div className={`alert ${isExpired ? 'alert-warning' : 'alert-success'} mb-8`}>
+            {isExpired ? (
+              <>
+                <div className="font-bold text-lg">⚠️ Connection Expired</div>
+                <div className="mt-2">Your Spotify token has expired. Please reconnect to continue playing.</div>
+              </>
+            ) : (
+              <>
+                <div className="font-bold text-lg">✅ Spotify Premium Connected!</div>
+                <div className="mt-2">Ready to play AI Music Bingo</div>
+              </>
+            )}
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4">
+            {isExpired && (
+              <button
+                onClick={connectSpotify}
+                className="btn btn-primary flex-1"
+              >
+                🔄 Reconnect Spotify
+              </button>
+            )}
             <button
-              onClick={connectSpotify}
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              onClick={disconnectSpotify}
+              className="btn btn-danger"
             >
-              Reconnect Spotify
+              Disconnect
             </button>
-          )}
-          <button
-            onClick={disconnectSpotify}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Disconnect Spotify
-          </button>
+          </div>
         </div>
       </div>
     )
@@ -96,15 +112,42 @@ export default function SpotifyConnect({ user }: { user: User }) {
 
   return (
     <div className="text-center">
-      <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
-        🎵 Connect your Spotify Premium account to start playing!
+      <div className="card max-w-lg mx-auto">
+        <div className="text-6xl mb-6">🎵</div>
+        <h2 className="text-3xl font-bold mb-6">Connect Spotify Premium</h2>
+        
+        <div className="alert alert-info mb-8">
+          <div className="font-bold text-lg">🎧 Spotify Premium Required</div>
+          <div className="mt-2">
+            You need a Spotify Premium account to control playback and enjoy the full AI Music Bingo experience.
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="text-center p-4">
+            <div className="text-2xl mb-2">🎵</div>
+            <div className="font-semibold">High Quality</div>
+            <div className="text-sm text-gray-400">Stream premium audio</div>
+          </div>
+          <div className="text-center p-4">
+            <div className="text-2xl mb-2">🎮</div>
+            <div className="font-semibold">Full Control</div>
+            <div className="text-sm text-gray-400">Play on any device</div>
+          </div>
+          <div className="text-center p-4">
+            <div className="text-2xl mb-2">🤖</div>
+            <div className="font-semibold">AI Cards</div>
+            <div className="text-sm text-gray-400">Smart challenges</div>
+          </div>
+        </div>
+
+        <button
+          onClick={connectSpotify}
+          className="btn btn-primary w-full text-lg"
+        >
+          🎵 Connect Spotify Premium
+        </button>
       </div>
-      <button
-        onClick={connectSpotify}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Connect Spotify Premium
-      </button>
     </div>
   )
 }

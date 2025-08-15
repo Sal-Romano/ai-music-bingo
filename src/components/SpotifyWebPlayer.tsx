@@ -294,13 +294,15 @@ export default function SpotifyWebPlayer({
   }
 
   return (
-    <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
-      <h3 className="text-lg font-bold mb-4 text-center">🎵 Spotify Player</h3>
+    <div className="card">
+      <div className="text-center mb-8">
+        <h3 className="text-2xl font-bold mb-2">🎧 Spotify Player</h3>
+      </div>
       
       {/* Device Selection */}
       {devicesLoaded && devices.length > 0 && (
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="mb-6">
+          <label className="block font-medium mb-3">
             Choose Playback Device:
           </label>
           <select
@@ -312,17 +314,17 @@ export default function SpotifyWebPlayer({
                 setOriginalVolume(device.volume_percent || 50)
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="input mb-3"
           >
             {devices.map((device) => (
-              <option key={device.id} value={device.id}>
+              <option key={device.id} value={device.id} className="text-black">
                 {device.name} {device.is_active ? '(Active)' : ''} ({device.type})
               </option>
             ))}
           </select>
           <button
             onClick={() => loadDevices(accessToken)}
-            className="mt-2 text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded"
+            className="btn btn-secondary text-sm"
           >
             🔄 Refresh Devices
           </button>
@@ -331,13 +333,14 @@ export default function SpotifyWebPlayer({
 
       {/* No Devices Found */}
       {devicesLoaded && devices.length === 0 && (
-        <div className="mb-4 p-3 bg-orange-100 border border-orange-400 text-orange-700 rounded text-center">
-          <div className="text-sm">
-            No Spotify devices found. Please open Spotify on your phone or computer first, then click refresh.
+        <div className="alert alert-warning mb-6">
+          <div className="font-bold">📱 No Spotify Devices Found</div>
+          <div className="mt-2">
+            Please open Spotify on your phone, computer, or web browser first, then refresh.
           </div>
           <button
             onClick={() => loadDevices(accessToken)}
-            className="mt-2 bg-orange-200 hover:bg-orange-300 px-3 py-1 rounded text-sm"
+            className="btn btn-secondary mt-4"
           >
             🔄 Refresh Devices
           </button>
@@ -346,54 +349,62 @@ export default function SpotifyWebPlayer({
 
       {/* Loading Devices */}
       {!devicesLoaded && (
-        <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded text-center">
-          <div className="text-sm">Loading Spotify devices...</div>
+        <div className="alert alert-info mb-6">
+          <div className="flex items-center justify-center space-x-3">
+            <div className="animate-spin w-5 h-5 border-3 border-blue-400 border-t-transparent rounded-full"></div>
+            <span>Loading Spotify devices...</span>
+          </div>
         </div>
       )}
       
       {/* Game Status */}
       {gameStarted && (
-        <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded text-center">
-          <div className="text-lg font-bold">⏱️ {timeLeft}s remaining</div>
-          <div className="text-sm">Listen and mark your bingo card!</div>
-          {isFading && (
-            <div className="text-xs mt-1 text-blue-600">
-              🎵 Fading {timeLeft <= 2 ? 'out' : 'in'}...
-            </div>
-          )}
+        <div className="alert alert-success mb-6">
+          <div className="text-center">
+            <div className="text-3xl font-bold mb-2">⏱️ {timeLeft}s</div>
+            <div className="font-medium">Listen and mark your bingo card!</div>
+            {isFading && (
+              <div className="text-sm mt-2 opacity-75">
+                🎵 {timeLeft <= 2 ? 'Fading out...' : 'Fading in...'}
+              </div>
+            )}
+          </div>
         </div>
       )}
       
       {/* Current Track Info */}
-      <div className="mb-6 text-center">
+      <div className="mb-8 text-center">
         {currentTrack.album.images.length > 0 && (
-          <img 
-            src={currentTrack.album.images[0].url} 
-            alt={currentTrack.album.name}
-            className="w-32 h-32 mx-auto mb-4 rounded"
-          />
+          <div className="mb-4">
+            <img 
+              src={currentTrack.album.images[0].url} 
+              alt={currentTrack.album.name}
+              className="w-40 h-40 mx-auto rounded-2xl shadow-lg"
+            />
+          </div>
         )}
-        <h4 className="font-bold text-lg">{currentTrack.name}</h4>
-        <p className="text-gray-600">{currentTrack.artists.map(a => a.name).join(', ')}</p>
-        <p className="text-sm text-gray-500">{currentTrack.album.name}</p>
+        <h4 className="font-bold text-xl mb-2">{currentTrack.name}</h4>
+        <p className="text-gray-300 mb-1">{currentTrack.artists.map(a => a.name).join(', ')}</p>
+        <p className="text-sm text-gray-400">{currentTrack.album.name}</p>
       </div>
 
       {/* Game Controls */}
       {selectedDevice && !gameStarted ? (
-        <div className="mb-4">
+        <div className="mb-6">
           <button
             onClick={startGame}
             disabled={gameCompleted}
-            className="w-full bg-green-500 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg text-lg"
+            className="btn btn-primary w-full text-lg"
           >
-            🎵 Start Auto-Play Game (30s per song)
+            🎵 Start Auto-Play Game
+            <div className="text-sm opacity-75 mt-1">(30s per song)</div>
           </button>
         </div>
       ) : selectedDevice && gameStarted ? (
-        <div className="mb-4">
+        <div className="mb-6">
           <button
             onClick={stopGame}
-            className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg text-lg"
+            className="btn btn-danger w-full text-lg"
           >
             ⏹️ Stop Game
           </button>
@@ -402,10 +413,10 @@ export default function SpotifyWebPlayer({
 
       {/* Manual Playback Controls */}
       {selectedDevice && (
-        <div className="mb-4">
+        <div className="mb-6">
           <button
             onClick={isPlaying ? pauseTrack : playCurrentTrack}
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="btn btn-secondary w-full"
           >
             {isPlaying ? '⏸️ Pause' : '▶️ Play'} Current Song
           </button>
@@ -413,11 +424,11 @@ export default function SpotifyWebPlayer({
       )}
 
       {/* Navigation Controls */}
-      <div className="flex justify-center items-center space-x-4 mb-4">
+      <div className="flex gap-3 mb-6">
         <button
           onClick={previousSong}
           disabled={currentSongIndex === 0}
-          className="bg-gray-500 hover:bg-gray-700 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded"
+          className="btn btn-secondary flex-1"
         >
           ⏮️ Previous
         </button>
@@ -425,22 +436,25 @@ export default function SpotifyWebPlayer({
         <button
           onClick={nextSong}
           disabled={currentSongIndex === tracks.length - 1}
-          className="bg-gray-500 hover:bg-gray-700 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded"
+          className="btn btn-secondary flex-1"
         >
           Next ⏭️
         </button>
       </div>
 
       {/* Track Progress */}
-      <div className="text-center text-sm text-gray-600 mb-4">
-        Track {currentSongIndex + 1} of {tracks.length}
+      <div className="text-center mb-6">
+        <div className="bg-white text-black inline-block px-4 py-2 rounded-full font-medium">
+          Track {currentSongIndex + 1} of {tracks.length}
+        </div>
       </div>
 
       {/* Instructions */}
-      <div className="p-3 bg-blue-100 border border-blue-400 text-blue-700 rounded text-sm">
-        <p className="text-center">
-          🎧 This will play music directly through your Spotify account! Make sure you have Spotify Premium and this device is authorized.
-        </p>
+      <div className="alert alert-info text-center">
+        <div className="font-bold">🎧 Spotify Premium Required</div>
+        <div className="mt-2">
+          Music plays directly through your Spotify account. Make sure this device is authorized.
+        </div>
       </div>
     </div>
   )

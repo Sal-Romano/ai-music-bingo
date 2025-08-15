@@ -61,19 +61,24 @@ export default function AuthButton() {
 
   if (loading) {
     return (
-      <button className="bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded cursor-not-allowed">
-        Loading...
+      <button className="btn-secondary opacity-50 cursor-not-allowed" disabled>
+        <div className="flex items-center space-x-2">
+          <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+          <span>Loading...</span>
+        </div>
       </button>
     )
   }
 
   if (user) {
     return (
-      <div className="flex items-center gap-4">
-        <span className="text-sm">Welcome, {user.email}!</span>
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        <div className="bg-white text-black px-6 py-2 rounded-full font-medium">
+          👋 {user.email?.split('@')[0]}
+        </div>
         <button
           onClick={handleSignOut}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          className="btn btn-danger"
         >
           Sign Out
         </button>
@@ -83,49 +88,59 @@ export default function AuthButton() {
 
   if (showLogin) {
     return (
-      <form onSubmit={handleSignIn} className="flex flex-col gap-4 max-w-sm mx-auto">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          required
-        />
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            disabled={authLoading}
-            className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded flex-1"
-          >
-            {authLoading ? 'Signing in...' : 'Sign In'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowLogin(false)}
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+      <div className="card max-w-md mx-auto">
+        <h3 className="text-2xl font-bold text-center mb-6">Sign In to Play</h3>
+        <form onSubmit={handleSignIn} className="space-y-6">
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="input"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input"
+            required
+          />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              type="submit"
+              disabled={authLoading}
+              className="btn btn-primary flex-1"
+            >
+              {authLoading ? (
+                <>
+                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowLogin(false)}
+              className="btn btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     )
   }
 
   return (
     <button
       onClick={() => setShowLogin(true)}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      className="btn btn-primary text-lg px-12 py-4"
     >
-      Sign In
+      🎵 Start Playing
     </button>
   )
 }

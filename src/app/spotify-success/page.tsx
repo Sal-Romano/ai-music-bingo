@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
-export default function SpotifySuccess() {
+function SpotifySuccessContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState('Processing Spotify connection...')
@@ -12,6 +12,13 @@ export default function SpotifySuccess() {
   useEffect(() => {
     const storeTokens = async () => {
       try {
+        // Check if searchParams is available
+        if (!searchParams) {
+          setStatus('Error: No search parameters available')
+          setTimeout(() => router.push('/?error=no_params'), 2000)
+          return
+        }
+
         // Get tokens from URL params
         const accessToken = searchParams.get('access_token')
         const refreshToken = searchParams.get('refresh_token')
@@ -95,5 +102,21 @@ export default function SpotifySuccess() {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mx-auto"></div>
       </div>
     </div>
+  )
+}
+
+export default function SpotifySuccess() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">🎵 AI Music Bingo</h1>
+          <p className="mb-4">Loading...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mx-auto"></div>
+        </div>
+      </div>
+    }>
+      <SpotifySuccessContent />
+    </Suspense>
   )
 }

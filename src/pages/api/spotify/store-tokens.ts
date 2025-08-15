@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Create Supabase client with service role permissions (bypasses RLS)
     const supabase = createClient(
       process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PUBLIC_KEY!
+      process.env.SUPABASE_ANON_KEY!
     )
 
     // Store tokens in database

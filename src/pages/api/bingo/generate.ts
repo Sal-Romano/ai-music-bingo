@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Get Supabase client
     const supabase = createClient(
       process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PUBLIC_KEY!
+      process.env.SUPABASE_ANON_KEY!
     )
 
     // Get user's Spotify tokens

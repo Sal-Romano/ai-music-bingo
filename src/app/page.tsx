@@ -68,35 +68,66 @@ export default function Home() {
 
   if (loading || checkingSpotify) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
-        <div>Loading...</div>
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <div className="card text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-lg">Loading your music bingo experience...</p>
+        </div>
       </main>
     )
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="z-10 max-w-6xl w-full">
-        <h1 className="text-4xl font-bold text-center mb-8">
-          🎵 AI Music Bingo 🎵
-        </h1>
-        <p className="text-center text-lg mb-8">
-          Play bingo with AI-generated music cards powered by Spotify!
-        </p>
-        
-        <div className="flex justify-center mb-8">
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
+              🎵 AI Music Bingo
+            </span>
+          </h1>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Play bingo with AI-generated music cards powered by Spotify Premium
+          </p>
           <AuthButton />
         </div>
 
+        {/* Main Content */}
         {user && !isSpotifyConnected && (
-          <div className="mt-8">
-            <SpotifyConnect user={user} />
-          </div>
+          <SpotifyConnect user={user} />
         )}
 
         {user && isSpotifyConnected && (
-          <div className="mt-8">
-            <BingoGame user={user} />
+          <BingoGame user={user} />
+        )}
+
+        {!user && (
+          <div className="text-center">
+            <div className="card max-w-lg mx-auto">
+              <div className="text-6xl mb-6">🎵</div>
+              <h2 className="text-3xl font-bold mb-4">Welcome to AI Music Bingo!</h2>
+              <p className="text-gray-300 mb-8 text-lg">
+                Sign in to start playing with AI-generated music cards that sync with your Spotify Premium account.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div className="p-4">
+                  <div className="text-3xl mb-2">🤖</div>
+                  <div className="font-semibold">AI-Generated</div>
+                  <div className="text-sm text-gray-400">Smart music challenges</div>
+                </div>
+                <div className="p-4">
+                  <div className="text-3xl mb-2">🎧</div>
+                  <div className="font-semibold">Spotify Premium</div>
+                  <div className="text-sm text-gray-400">Full music control</div>
+                </div>
+                <div className="p-4">
+                  <div className="text-3xl mb-2">📱</div>
+                  <div className="font-semibold">Mobile Ready</div>
+                  <div className="text-sm text-gray-400">Play anywhere</div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

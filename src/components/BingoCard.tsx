@@ -14,6 +14,10 @@ export default function BingoCard({ bingoCard, stampedCells, onCellStamp, gameCo
   const handleCellClick = useCallback((cellIndex: number) => {
     if (!gameCompleted) {
       onCellStamp(cellIndex)
+      // Add haptic feedback on mobile
+      if (navigator.vibrate) {
+        navigator.vibrate(50)
+      }
     }
   }, [onCellStamp, gameCompleted])
 
@@ -28,57 +32,54 @@ export default function BingoCard({ bingoCard, stampedCells, onCellStamp, gameCo
   const winningPattern = getWinningPattern()
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="text-center mb-4">
-        <h2 className="text-2xl font-bold mb-2">🎵 Music Bingo 🎵</h2>
+    <div className="w-full">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold mb-6">
+          🎵 Music Bingo Card
+        </h2>
+        
         {winningPattern && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded animate-pulse">
+          <div className="alert alert-success mb-6">
             <div className="text-center">
-              <div className="text-2xl font-bold">🎉 BINGO! 🎉</div>
-              <div className="text-lg">{winningPattern}</div>
-              <div className="text-sm mt-1">Congratulations! You won!</div>
+              <div className="text-4xl font-bold mb-2">🎉 BINGO! 🎉</div>
+              <div className="text-xl font-semibold">{winningPattern}</div>
+              <div className="mt-2">Congratulations! You won!</div>
             </div>
           </div>
         )}
       </div>
       
-      <div className="bingo-card bg-white border-2 border-gray-300 rounded-lg p-2">
-        {bingoCard.cells.map((cell: BingoCell, index: number) => (
-          <div
-            key={cell.id}
-            className={`bingo-cell ${
-              isStamped(index) ? 'stamped' : ''
-            } ${
-              cell.isFree ? 'free' : ''
-            }`}
-            onClick={() => handleCellClick(index)}
-            style={{
-              backgroundColor: isStamped(index) 
-                ? cell.isFree 
-                  ? '#FFD700' 
-                  : '#4CAF50'
-                : '#ffffff',
-              color: isStamped(index) 
-                ? cell.isFree 
-                  ? '#333' 
-                  : 'white'
-                : '#333',
-              cursor: gameCompleted ? 'default' : 'pointer'
-            }}
-          >
-            <div className="text-xs leading-tight">
+      <div className="flex justify-center mb-8">
+        <div className="bingo-card">
+          {bingoCard.cells.map((cell: BingoCell, index: number) => (
+            <div
+              key={cell.id}
+              className={`bingo-cell ${
+                isStamped(index) ? 'stamped' : ''
+              } ${
+                cell.isFree ? 'free' : ''
+              }`}
+              onClick={() => handleCellClick(index)}
+            >
               {cell.text}
             </div>
-            {isStamped(index) && !cell.isFree && (
-              <div className="text-lg">✓</div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       
-      <div className="mt-4 text-center text-sm text-gray-600">
-        <p>Click cells when you hear matching songs!</p>
-        <p>Stamped: {stampedCells.length} / 24</p>
+      <div className="text-center">
+        <div className="bg-white text-black inline-block px-6 py-3 rounded-full font-medium mb-4">
+          <div className="flex items-center space-x-4 text-sm">
+            <span>✅ Stamped: {stampedCells.length}</span>
+            <span>•</span>
+            <span>⏳ Remaining: {24 - stampedCells.length}</span>
+          </div>
+        </div>
+        
+        <p className="text-gray-400 max-w-sm mx-auto">
+          Tap cells when you hear matching songs! 
+          {!gameCompleted && " Get 5 in a row to win!"}
+        </p>
       </div>
     </div>
   )

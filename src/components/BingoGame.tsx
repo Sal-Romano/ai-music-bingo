@@ -131,15 +131,19 @@ export default function BingoGame({ user }: BingoGameProps) {
   if (error) {
     return (
       <div className="text-center">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+        <div className="card max-w-lg mx-auto">
+          <div className="text-6xl mb-6">😵</div>
+          <div className="alert alert-error mb-8">
+            <div className="font-bold text-lg">Oops! Something went wrong</div>
+            <div className="mt-2">{error}</div>
+          </div>
+          <button
+            onClick={generateNewGame}
+            className="btn btn-primary w-full"
+          >
+            🔄 Try Again
+          </button>
         </div>
-        <button
-          onClick={generateNewGame}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Try Again
-        </button>
       </div>
     )
   }
@@ -147,8 +151,16 @@ export default function BingoGame({ user }: BingoGameProps) {
   if (loading) {
     return (
       <div className="text-center">
-        <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
-          🎵 Generating your AI Music Bingo card... 🎵
+        <div className="card max-w-lg mx-auto">
+          <div className="text-6xl mb-6">🤖</div>
+          <div className="alert alert-info mb-6">
+            <div className="font-bold text-lg">🎵 Creating Your Bingo Card</div>
+            <div className="mt-2">AI is generating personalized music challenges...</div>
+          </div>
+          <div className="flex items-center justify-center space-x-3">
+            <div className="animate-spin w-6 h-6 border-4 border-green-500 border-t-transparent rounded-full"></div>
+            <span className="text-lg">This may take a moment</span>
+          </div>
         </div>
       </div>
     )
@@ -157,24 +169,31 @@ export default function BingoGame({ user }: BingoGameProps) {
   if (!gameSession) {
     return (
       <div className="text-center">
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-          🎵 Ready to play AI Music Bingo! 🎵
+        <div className="card max-w-lg mx-auto">
+          <div className="text-6xl mb-6">🎯</div>
+          <h2 className="text-3xl font-bold mb-6">Ready to Play!</h2>
+          <div className="alert alert-success mb-8">
+            <div className="font-bold text-lg">🎵 AI Music Bingo</div>
+            <div className="mt-2">
+              Generate a personalized bingo card with AI-curated music challenges
+            </div>
+          </div>
+          <button
+            onClick={generateNewGame}
+            className="btn btn-primary w-full text-lg"
+          >
+            🎲 Generate Bingo Card
+          </button>
         </div>
-        <button
-          onClick={generateNewGame}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-lg"
-        >
-          Generate Bingo Card
-        </button>
       </div>
     )
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Bingo Card */}
-        <div>
+        <div className="order-2 lg:order-1">
           <BingoCard
             bingoCard={gameSession.bingo_card}
             stampedCells={gameSession.stamped_cells}
@@ -183,19 +202,19 @@ export default function BingoGame({ user }: BingoGameProps) {
           />
           
           {gameSession.is_completed && (
-            <div className="mt-4 text-center">
+            <div className="mt-8 text-center">
               <button
                 onClick={generateNewGame}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="btn btn-primary text-lg"
               >
-                Play Again
+                🎵 Play Again
               </button>
             </div>
           )}
         </div>
 
         {/* Spotify Player */}
-        <div>
+        <div className="order-1 lg:order-2">
           <SpotifyWebPlayer
             user={user}
             tracks={gameSession.bingo_card.tracks}
